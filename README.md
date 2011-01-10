@@ -41,7 +41,7 @@ Items can also be evicted to make way for new items that need to be stored.
 ## Current State
 Currently, the project is Alpha (version 0.0.1), not tested in production enviroment. However, it was tested using diferent scenarios and condition, with different clients (see /test/from_clients folder).
 
-I haven't done any serious performance test, only simple ones. Comparared with the original memcached written in C, memcached.js performance is between 1% and 10% slower. The situation may worsen as new functionality is added (currently, it's ~ 500 of javascript LOC against ~ 7500 of C LOC, according to [CLOC](http://sourceforge.net/projects/cloc/)). At the same time, it can be improved since no optimization has been done yet and I can see many places where it could do better.
+I haven't done any serious performance test, only simple ones. Comparared with the original memcached written in C, memcached.js performance is between 1% and 10% slower. The situation may worsen as new functionality is added (currently, it's ~ 750 of javascript LOC against ~ 7500 of C LOC, according to [CLOC](http://sourceforge.net/projects/cloc/)). At the same time, it can be improved since no optimization has been done yet and I can see many places where it could do better.
 
 JavaScript is a new language for me (at least on the server side). So the code may look a lot like a Java or C# code. Tips on how to improve the code are more than welcome. 
 
