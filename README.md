@@ -1,0 +1,59 @@
+# Memcached.js
+Memcached.js is a port of [Memcached](http://memcached.org/) to Javascript, running on Node.Js.
+
+## What it does?
+
+From the original project: 
+
+"Free & open source, high-performance, distributed memory object caching system, generic in nature, but intended for use in speeding up dynamic web applications by alleviating database load.
+
+Memcached is an in-memory key-value store for small chunks of arbitrary data (strings, objects) from results of database calls, API calls, or page rendering."
+
+This version:
+
+* Non blocking operations: "take near constant time to execute, no matter how much data is in the cache."
+	* Well, not completely true: adding and removing items to cache allocate memory dynamically, because it doesn't allocate memory upfront when it starts. So, it may take sometime allocating memory. We will fix it in the future, but for now, it probably won't hurt you.
+	* On the other hand, the cache operates on algorithms with O(1) complexity. No complex timers / triggers. Just a hash and linked list.
+	* And of course, it uses the non-blocking events provided by Node.js
+* Supported commands on this version: get, set, flush_all, delete, add, replace 
+
+
+## What it doesn't do?
+
+* It is not a client for memcached 
+* Binary memcached protocol, only ASCII
+* UDP protocol
+* cas, gets, append, prepend, version, quit, incr and decr commands
+* delete queue
+* stats command with params
+* Pre-allocate memory or pagination
+* Sophisticated cache strategies. All it does right now is the the old and good LRU, for all items. No discrimination.
+
+
+## 	When Memory Is Reclaimed
+Memory for an item is not actively reclaimed. If you store an item and it expires, it sits in the LRU cache at its position until it falls to the end and is reused.
+
+However, if you fetch an expired item, memcached will find the item, notice that it's expired, and free its memory. This gives you the common case of normal cache churn reusing its own memory.
+
+Items can also be evicted to make way for new items that need to be stored.
+
+
+## Current State
+Currently, the project is Alpha (version 0.0.1), not tested in production enviroment. However, it was tested using diferent scenarios and condition, with different clients (see /test/from_clients folder).
+
+I haven't done any serious performance test, only simple ones. Comparared with the original memcached written in C, memcached.js performance is between 1% and 10% slower. The situation may worsen as new functionality is added (currently, it's ~ 500 of javascript LOC against ~ 7500 of C LOC, according to [CLOC](http://sourceforge.net/projects/cloc/)). At the same time, it can be improved since no optimization has been done yet and I can see many places where it could do better.
+
+JavaScript is a new language for me (at least on the server side). So the code may look a lot like a Java or C# code. Tips on how to improve the code are more than welcome. 
+
+Tested on Node.JS version v0.3.3-pre.
+
+
+## Using Memcached.js
+
+	cd memcached.js
+	node start.js
+	
+On the client side:
+
+	telnet localhost 11211
+	stats
