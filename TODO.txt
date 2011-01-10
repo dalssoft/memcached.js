@@ -1,0 +1,15 @@
+TODO r1
+=======
+- Verify max size on storage commands
+- TESTs!
+- Improve commands validation
+- Improve memory manipulation (use Buffer)
+
+TODO r2
+=======
+- Pre-alocate memory
+- CMD: Append
+- CMD: Prepend
+- CMD: Cas 
+- CMD: Stats with params
+- CMD: implement "noreply" and send no information to client
