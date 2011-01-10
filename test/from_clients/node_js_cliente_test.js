@@ -39,56 +39,6 @@ var basicGetSetTest = function() {
 	mcClient.close();
 };
 
-var benchmark2 = function() {
-	var count = 3;
-	start = microtime(true);
-	var x = 0;
-	
-	for (var i=0; i<=count; i++) {
-		mcClient.set('test' + i, 'hello \r\n node-memcache', function(response) {
-			mcClient.get('test' + i, function(data) {
-				x += 1;		
-				sys.debug(data);
-				if (x == count) {
-					end = microtime(true);
-					sys.debug('total time: ' + (end - start));
-				}
-			})
-		});
-	}
-	
-	mcClient.close();
-};
-
-var setKey = function() {
-	mcClient.set('test', 'hello \r\n node-memcache', function(response) {
-		mcClient.get('test', function(data) {
-			sys.debug(data);
-			mcClient.close();
-		});
-	});
-};
-
-var version = function() {
-	mcClient.version(function(version) {
-		sys.debug(version);
-		mcClient.close();
-	});
-};
-
-var incr = function() {
-	mcClient.increment('x', 2, function(new_value) {
-		sys.debug(new_value);
-		mcClient.close();
-	});
-};
-
-var decr = function() {
-	mcClient.decrement('x', 1, function(new_value) {
-		sys.debug(new_value);
-		mcClient.close();
-	});
-};
 
 mcClient = new memcache.Client();
 mcClient.connect();
