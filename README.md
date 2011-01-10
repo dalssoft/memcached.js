@@ -1,7 +1,7 @@
 # Memcached.js
 Memcached.js is a port of [Memcached](http://memcached.org/) to Javascript, running on Node.Js.
 
-## What it does?
+## What does it do?
 
 From the original project: 
 
