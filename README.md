@@ -48,14 +48,14 @@ JavaScript is a new language for me (at least on the server side). So the code m
 Tested on Node.JS version v0.3.3-pre.
 
 Clients tested:
-	Ruby:
-		- Ruby MemCache Client [http://deveiate.org/projects/RMemCache/]
-		- memcache-client [http://rubygems.org/gems/memcache-client/versions/1.8.5]
-	Node:
-		- node-memcache [https://github.com/vanillahsu/node-memcache]
-	Perl:
-		- damemtop [https://github.com/dormando/damemtop]
-		- memcache-top [http://code.google.com/p/memcache-top/]
+Ruby:
+	- Ruby MemCache Client [http://deveiate.org/projects/RMemCache/]
+	- memcache-client [http://rubygems.org/gems/memcache-client/versions/1.8.5]
+Node.js:
+	- node-memcache [https://github.com/vanillahsu/node-memcache]
+Perl:
+	- damemtop [https://github.com/dormando/damemtop]
+	- memcache-top [http://code.google.com/p/memcache-top/]
 
 ## Using Memcached.js
 
