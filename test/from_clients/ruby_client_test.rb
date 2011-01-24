@@ -97,22 +97,6 @@ Benchmark.bm do |x|
     end
   }
   
-  x.report("n times set and get with big data")   {
-    n.times do |x|
-  
-      key = "big_" + x.to_s
-      value = ""
-      (1024 * 10).times do |x| value << ('|' + x.to_s) end
-  
-      memcache.set key, value, timeout
-      
-      ret_value = memcache.get key
-  
-      puts "Erro!" + key if ret_value[0] != value
-  
-    end
-  }
-  
   x.report("n times get without delay")   {
     n.times do |x|
   
@@ -134,5 +118,25 @@ Benchmark.bm do |x|
   
     end
   }
+  
+  x.report("n times set and get with big data")   {
+    value = ""
+    (1024 * 10).times do |x| value << ('|' + x.to_s) end
+    
+    n.times do |x|
+  
+      key = "big_" + x.to_s
+      
+      memcache.set key, value, timeout
+      
+      #ret_value = [value]
+      ret_value = memcache.get key
+      
+      puts "Erro!" + key if ret_value[0] != value
+  
+    end
+  }
+  
+
 
 end
