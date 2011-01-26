@@ -4,9 +4,9 @@ var mc = require('./lib/memcached.js');
 var log = require('./lib/memcached.log.js');
 
 global.memcachedParams = { 
-	verboseLevel: 3 // between 0 and 3;
+	verboseLevel: 0 // between 0 and 3;
 }
-var maxCacheSize = 10; // Megabytes
+var maxCacheSize = 64; // Megabytes
 var memcached = new mc.Memcached(maxCacheSize);
 
 var server = net.createServer(function (socket) {
