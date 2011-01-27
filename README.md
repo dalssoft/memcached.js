@@ -12,10 +12,10 @@ Memcached is an in-memory key-value store for small chunks of arbitrary data (st
 This version:
 
 * Non blocking operations: "take near constant time to execute, no matter how much data is in the cache."
-	* Well, not completely true: adding and removing items to cache allocate memory dynamically, because it doesn't allocate memory upfront when it starts. So, it may take sometime allocating memory. We will fix it in the future, but for now, it probably won't hurt you.
+	* Well, not completely true: adding and removing items to cache allocate memory dynamically, because it doesn't allocate memory upfront when the server starts. So, it may take sometime allocating memory. We will fix it in the future, but for now, it probably won't hurt you.
 	* On the other hand, the cache operates on algorithms with O(1) complexity. No complex timers / triggers. Just a hash and linked list.
 	* And of course, it uses the non-blocking events provided by Node.js
-* Supported commands on this version: get, set, flush_all, delete, add, replace 
+* Supported commands on this version: get, set, flush_all, delete, add, replace, stats 
 
 
 ## What it doesn't do?
@@ -39,15 +39,16 @@ Items can also be evicted to make way for new items that need to be stored.
 
 
 ## Current State
-Currently, the project is Alpha (version 0.0.1), not tested in production enviroment. However, it was tested using diferent scenarios and condition, with different clients (see /test/from_clients folder). 
+Currently, the project is Alpha (version 0.0.2), not tested in production enviroment. However, it was tested using diferent scenarios and condition, with different clients (see /test/from_clients folder). 
 
 I haven't done any serious performance test, only simple ones. Comparared with the original memcached written in C, memcached.js performance is between 1% and 10% slower. The situation may worsen as new functionality is added (currently, it's ~ 750 of javascript LOC against ~ 7500 of C LOC, according to [CLOC](http://sourceforge.net/projects/cloc/)). At the same time, it can be improved since no optimization has been done yet and I can see many places where it could do better.
 
 JavaScript is a new language for me (at least on the server side). So the code may look a lot like a Java or C# code. Tips on how to improve the code are more than welcome. 
 
-Tested on Node.JS version v0.3.3-pre.
+Tested on Node.JS version v0.3.3-pre/v0.3.6-pre.
 
 Clients tested:
+
 Ruby:
 	- Ruby MemCache Client [http://deveiate.org/projects/RMemCache/]
 	- memcache-client [http://rubygems.org/gems/memcache-client/versions/1.8.5]
