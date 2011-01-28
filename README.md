@@ -14,7 +14,7 @@ This version:
 * Non blocking operations: "take near constant time to execute, no matter how much data is in the cache."
 	* Well, not completely true: adding and removing items to cache allocate memory dynamically, because it doesn't allocate memory upfront when the server starts. So, it may take sometime allocating memory. We will fix it in the future, but for now, it probably won't hurt you.
 	* On the other hand, the cache operates on algorithms with O(1) complexity. No complex timers / triggers. Just a hash and linked list.
-	* And of course, it uses the non-blocking events provided by Node.js
+	* And of course, it uses the non-blocking event machine provided by Node.js
 * Supported commands on this version: get, set, flush_all, delete, add, replace, stats 
 
 
@@ -28,35 +28,35 @@ This version:
 * stats command with params
 * Pre-allocate memory or pagination
 * Sophisticated cache strategies. All it does right now is the the old and good LRU, for all items. No discrimination.
+	* However, now it uses the same heuristic that teh original project uses to clean expired items whem it needs more space.
 
 
 ## 	When Memory Is Reclaimed
 Memory for an item is not actively reclaimed. If you store an item and it expires, it sits in the LRU cache at its position until it falls to the end and is reused.
 
-However, if you fetch an expired item, memcached will find the item, notice that it's expired, and free its memory. This gives you the common case of normal cache churn reusing its own memory.
+However, if you fetch an expired item, memcached.js will find the item, notice that it's expired, and free its memory. This gives you the common case of normal cache churn reusing its own memory.
 
-Items can also be evicted to make way for new items that need to be stored.
-
+Items can also be evicted to make way for new items that need to be stored. But before that, we will try to drop a few expired items at the end of the list.
 
 ## Current State
-Currently, the project is Alpha (version 0.0.2), not tested in production enviroment. However, it was tested using diferent scenarios and condition, with different clients (see /test/from_clients folder). 
+Currently, the project is Alpha (version 0.0.3), not tested in production enviroment. However, it was tested using diferent scenarios and condition, with different clients (see /test/from_clients folder and the list below). 
 
-I haven't done any serious performance test, only simple ones. Comparared with the original memcached written in C, memcached.js performance is between 1% and 10% slower. The situation may worsen as new functionality is added (currently, it's ~ 750 of javascript LOC against ~ 7500 of C LOC, according to [CLOC](http://sourceforge.net/projects/cloc/)). At the same time, it can be improved since no optimization has been done yet and I can see many places where it could do better.
+I haven't done any serious performance test, just simple ones. Comparared with the original memcached written in C, memcached.js performance is between 1% and 10% slower. The situation may worsen as new functionality is added (currently, it's ~ 750 of javascript LOC against ~ 7500 of C LOC, according to [CLOC](http://sourceforge.net/projects/cloc/)). At the same time, it can be improved since no optimization has been done yet and I can see many places where it could do better.
 
 JavaScript is a new language for me (at least on the server side). So the code may look a lot like a Java or C# code. Tips on how to improve the code are more than welcome. 
 
-Tested on Node.JS version v0.3.3-pre/v0.3.6-pre.
+Tested on Node.JS version v0.3.6-pre.
 
 Clients tested:
 
 Ruby:
-	- Ruby MemCache Client [http://deveiate.org/projects/RMemCache/]
-	- memcache-client [http://rubygems.org/gems/memcache-client/versions/1.8.5]
+	- Ruby MemCache Client (http://deveiate.org/projects/RMemCache/)
+	- memcache-client (http://rubygems.org/gems/memcache-client/versions/1.8.5)
 Node.js:
-	- node-memcache [https://github.com/vanillahsu/node-memcache]
+	- node-memcache (https://github.com/vanillahsu/node-memcache
 Perl:
-	- damemtop [https://github.com/dormando/damemtop]
-	- memcache-top [http://code.google.com/p/memcache-top/]
+	- damemtop (https://github.com/dormando/damemtop)
+	- memcache-top (http://code.google.com/p/memcache-top/)
 
 ## Using Memcached.js
 
