@@ -118,15 +118,17 @@ Benchmark.bm do |x|
   
     end
   }
-  
+
+  value = ""
+  (1024 * 100).times do |x| value << ('|' + x.to_s) end
+      
   x.report("n times set and get with big data")   {
-    value = ""
-    (1024 * 10).times do |x| value << ('|' + x.to_s) end
-    
+
     n.times do |x|
   
       key = "big_" + x.to_s
       
+      #puts key
       memcache.set key, value, timeout
       
       #ret_value = [value]

@@ -39,9 +39,35 @@ var basicGetSetTest = function() {
 	mcClient.close();
 };
 
+var bigGetSetTest = function() {
+	var count = 200;
+	
+	var bigValue = [];
+	for (var i=0; i < (1022 * 100); i++){
+		bigValue.push("["+i+"]");
+	}
+	
+	value = bigValue.join();
+	
+	for (var i=0; i<=count; i++) {
+		mcClient.set('test' + i, value, function(response) {
+			sys.debug('set response:' +  response);
+		}, 3);
+		mcClient.get('test' + i, function(data) {
+			
+			if (data == value) 
+				sys.debug('get ok!');
+			else
+				sys.debug('get ERROR!');
+		});
+	}
+	
+	mcClient.close();
+};
+
 
 mcClient = new memcache.Client();
 mcClient.connect();
-mcClient.addHandler(basicGetSetTest);
+mcClient.addHandler(bigGetSetTest);
 
 
