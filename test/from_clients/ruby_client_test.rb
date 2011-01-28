@@ -12,7 +12,7 @@ require 'memcache'
 Benchmark.bm do |x|
   
   memcache = nil
-  n = 1000
+  n = 300
   timeout = 10
   x.report("start server")   {
     memcache = MemCache.new('localhost:11211')
@@ -120,7 +120,7 @@ Benchmark.bm do |x|
   }
 
   value = ""
-  (1024 * 100).times do |x| value << ('|' + x.to_s) end
+  (1024 * 10).times do |x| value << ('|' + x.to_s) end
       
   x.report("n times set and get with big data")   {
 
@@ -128,7 +128,7 @@ Benchmark.bm do |x|
   
       key = "big_" + x.to_s
       
-      #puts key
+      puts key
       memcache.set key, value, timeout
       
       #ret_value = [value]

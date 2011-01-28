@@ -43,17 +43,18 @@ var bigGetSetTest = function() {
 	var count = 200;
 	
 	var bigValue = [];
-	for (var i=0; i < (1022 * 100); i++){
+	for (var i=0; i < (1023 * 10); i++){
 		bigValue.push("["+i+"]");
 	}
 	
 	value = bigValue.join();
 	
 	for (var i=0; i<=count; i++) {
-		mcClient.set('test' + i, value, function(response) {
-			sys.debug('set response:' +  response);
+		var key = 'test' + i;
+		mcClient.set(key, value, function(response) {
+			sys.debug('set response: ' +  response);
 		}, 3);
-		mcClient.get('test' + i, function(data) {
+		mcClient.get(key, function(data) {
 			
 			if (data == value) 
 				sys.debug('get ok!');
