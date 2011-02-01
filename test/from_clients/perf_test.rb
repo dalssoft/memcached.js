@@ -9,6 +9,7 @@ memcache = MemCache.new('localhost:11211')
 n = 800
 value = ""
 (1048000).times do |x| value << ('.') end
+#(10480).times do |x| value << ('.') end
 
 n.times do |x|
 
