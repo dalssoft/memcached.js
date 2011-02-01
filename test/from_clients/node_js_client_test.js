@@ -39,18 +39,20 @@ var basicGetSetTest = function() {
 	mcClient.close();
 };
 
+
 var bigGetSetTest = function() {
-	var count = 300;
+	var count = 100;
 	
 	var bigValue = [];
-	for (var i=0; i < (1023 * 33); i++){
-		bigValue.push("["+i+"]");
+	for (var xi=0; xi < (1023 * 10); xi++){
+		bigValue.push("["+xi+"]");
 	}
-	
-	value = bigValue.join();
+
+    var value = bigValue.join();
 	
 	for (var i=0; i<=count; i++) {
 		var key = 'test' + i;
+		
 		mcClient.set(key, value, function(response) {
 			sys.debug('set response: ' +  response);
 		}, 3);
