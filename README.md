@@ -50,13 +50,15 @@ Tested on Node.JS version v0.3.6-pre.
 Clients tested:
 
 Ruby:
-	- [Ruby MemCache Client](http://deveiate.org/projects/RMemCache/)
-	- [memcache-client](http://rubygems.org/gems/memcache-client/versions/1.8.5)
+- [Ruby MemCache Client](http://deveiate.org/projects/RMemCache/)
+- [memcache-client](http://rubygems.org/gems/memcache-client/versions/1.8.5)
+
 Node.js:
-	- [node-memcache](https://github.com/vanillahsu/node-memcache
+- [node-memcache](https://github.com/vanillahsu/node-memcache
+
 Perl:
-	- [damemtop](https://github.com/dormando/damemtop)
-	- [memcache-top](http://code.google.com/p/memcache-top/)
+- [damemtop](https://github.com/dormando/damemtop)
+- [memcache-top](http://code.google.com/p/memcache-top/)
 
 ## Using Memcached.js
 
