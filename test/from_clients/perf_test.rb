@@ -1,3 +1,5 @@
+# (without --prof, --debug or -verbose)
+# ruby test/from_clients/perf_test.rb > test/perf_test/memcached.{xyz}.txt
 
 require 'rubygems'
 require 'memcache'
