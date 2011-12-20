@@ -8,7 +8,7 @@
 # Memcached.js
 Memcached.js is a port of [Memcached](http://memcached.org/) to Javascript, running on Node.Js.
 
-# Install
+## Install
 
 git clone git://github.com/dalssoft/memcached.js.git
 
