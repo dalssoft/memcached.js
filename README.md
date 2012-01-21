@@ -45,7 +45,7 @@ This version:
 * stats command with params
 * Pre-allocate memory or pagination
 * Sophisticated cache strategies. All it does right now is the the old and good LRU, for all items. No discrimination.
-	* However, now it uses the same heuristic that teh original project uses to clean expired items whem it needs more space.
+	* However, now it uses the same heuristic that the original project uses to clean expired items when it needs more space.
 
 
 ## 	When Memory Is Reclaimed
@@ -58,7 +58,7 @@ Items can also be evicted to make way for new items that need to be stored. But 
 ## Current State
 Currently, the project is Alpha (version 0.0.3), not tested in production enviroment. However, it was tested using diferent scenarios and condition, with different clients (see /test/from_clients folder and the list below). 
 
-I haven't done any serious performance test, just simple ones. Comparared with the original memcached written in C, memcached.js performance is between 30% and 50% slower. The situation may worsen as new functionality is added (currently, it's ~ 750 of javascript LOC against ~ 7500 of C LOC, according to [CLOC](http://sourceforge.net/projects/cloc/)). At the same time, it can be improved since no optimization has been done yet and I can see many places where it could do better.
+I haven't done any serious performance test, just simple ones. Compared with the original memcached written in C, memcached.js performance is between 30% and 50% slower. The situation may worsen as new functionality is added (currently, it's ~ 750 of javascript LOC against ~ 7500 of C LOC, according to [CLOC](http://sourceforge.net/projects/cloc/)). At the same time, it can be improved since no optimization has been done yet and I can see many places where it could do better.
 
 JavaScript is a new language for me (at least on the server side). So the code may look a lot like a Java or C# code. Tips on how to improve the code are more than welcome. 
 
