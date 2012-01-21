@@ -10,13 +10,13 @@ Memcached.js is a port of [Memcached](http://memcached.org/) to Javascript, runn
 
 ## Install
 
-git clone git://github.com/dalssoft/memcached.js.git
+	git clone git://github.com/dalssoft/memcached.js.git
 
-cd memcached.js
+	cd memcached.js
 
-npm install v8-profiler	
+	npm install v8-profiler	
 
-node start.js
+	node start.js
 
 ## What does it do?
 
