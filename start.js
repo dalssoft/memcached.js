@@ -2,7 +2,7 @@ var net = require('net');
 var util = require('util');
 var mc = require('./lib/memcached.js');
 var log = require('./lib/memcached.log.js');
-var profiler = require('v8-profiler');
+//var profiler = require('v8-profiler');
 
 global.memcachedParams = { 
 	verboseLevel: 0 // between 0 and 3;
