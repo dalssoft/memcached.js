@@ -62,6 +62,9 @@ Tested on Node.JS version v0.3.6-pre.
 
 Clients tested:
 
+C/C++:
+- [memcslap](https://code.launchpad.net/libmemcached)
+
 Ruby:
 
 - [Ruby MemCache Client](http://deveiate.org/projects/RMemCache/)
