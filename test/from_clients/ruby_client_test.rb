@@ -1,3 +1,4 @@
+# encoding: utf-8
 # How to run:
 #     rvm 1.9.2
 #     gem install Ruby-MemCache
@@ -28,6 +29,37 @@ Benchmark.bm do |x|
     memcache.get "b"
   }
   
+  x.report("basic get and set - with check")   {
+
+    data1 = "Test Data Ruby"
+    memcache.set "awc", data1, timeout
+    exp_data1 = memcache.get "awc"
+    throw "Test 1 - not the equal '#{data1}' and '#{exp_data1[0]}'" if data1 != exp_data1[0]
+    
+    data2 = "Test Data Ruby\r\nWith two lines"
+    memcache.set "bwc", data2, timeout
+    exp_data2 = memcache.get "bwc"
+    throw "Test 2 - not the equal '#{data2}' and '#{exp_data2[0]}'" if data2 != exp_data2[0]
+
+    key3 = "dç\u0010\u0010X"
+    data3 = "Test Data Ruby\r\nWith 3\r\nlines and UTF key"
+    memcache.set key3, data3, timeout
+    exp_data3 = memcache.get key3
+    throw "Test 3 - not the equal '#{data3}' and '#{exp_data3[0]}'" if data3 != exp_data3[0]
+
+    key4 = "ewc"
+    data4 = "Test Data Ruby\r\nWith 3\r\nlines and UTF value: \u0010\u0010\u0010\u0010\u0010\u0010\u0010\u00104Utup8qCEj\u00104"
+    memcache.set key4, data4, timeout
+    exp_data4 = memcache.get key4
+    throw "Test 4 - not the equal '#{data4}' and '#{exp_data4[0]}'" if data4 != exp_data4[0]
+
+    data5 = "Test Data Ruby without timeout"
+    memcache.set "fwc", data5
+    exp_data5 = memcache.get "fwc"
+    throw "Test 5 - not the equal '#{data5}' and '#{exp_data5[0]}'" if data5 != exp_data5[0]
+
+  }
+
   x.report("basic get and add")   {
     memcache.add "aa", "Test Data Ruby", timeout
 
@@ -49,7 +81,7 @@ Benchmark.bm do |x|
 
     memcache.get "r"
   }
-  
+
   x.report("basic multi get")   {
     
     keys = ["b_1", "b_2", "b_3"]
@@ -138,6 +170,4 @@ Benchmark.bm do |x|
     end
   }
   
-
-
 end
