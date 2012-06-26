@@ -70,6 +70,30 @@ Benchmark.bm do |x|
     memcache.get "aa"
   }
   
+  x.report("basic get and add - with check")   {
+
+    data1 = "Test Data Ruby"
+    memcache.add "awc", data1, timeout
+    exp_data1 = memcache.get "awc"
+    throw "Test 1 - not the equal '#{data1}' and '#{exp_data1[0]}'" if data1 != exp_data1[0]
+    
+    data2 = "Test Data Ruby 2"
+    memcache.add "awc", data2, timeout
+    exp_data2 = memcache.get "awc"
+    throw "Test 2 - not the equal '#{data1}' and '#{exp_data2[0]}'" if data1 != exp_data2[0]
+
+    data3 = "Test Data Ruby without timeout"
+    memcache.add "fwc", data3
+    exp_data3 = memcache.get "fwc"
+    throw "Test 3 - not the equal '#{data3}' and '#{exp_data3[0]}'" if data3 != exp_data3[0]
+
+    data4 = "Test Data Ruby without timeout 2"
+    memcache.add "fwc", data4
+    exp_data4 = memcache.get "fwc"
+    throw "Test 4 - not the equal '#{data3}' and '#{exp_data4[0]}'" if data3 != exp_data4[0]
+
+  }
+
   x.report("basic get and replace")   {
     memcache.replace "r", "Test Data Ruby", timeout
 
@@ -80,6 +104,19 @@ Benchmark.bm do |x|
     memcache.replace "r", "Test Data Ruby2", timeout
 
     memcache.get "r"
+  }
+
+  x.report("basic get and replace - with check")   {
+    data1 = "Test Data Ruby"
+    memcache.replace "rwc", data1, timeout
+    exp_data1 = memcache.get "rwc"
+    throw "Test 1 - not blank '#{exp_data1[0]}'" if not exp_data1[0].nil?
+
+    memcache.set "rwc", data1, timeout
+    data2 = "Test Data Ruby 2"
+    memcache.replace "rwc", data2, timeout
+    exp_data2 = memcache.get "rwc"
+    throw "Test 2 - not the equal '#{data2}' and '#{exp_data2[0]}'" if data2 != exp_data2[0]
   }
 
   x.report("basic multi get")   {
