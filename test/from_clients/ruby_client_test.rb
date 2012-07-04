@@ -41,14 +41,14 @@ Benchmark.bm do |x|
     exp_data2 = memcache.get "bwc"
     throw "Test 2 - not the equal '#{data2}' and '#{exp_data2[0]}'" if data2 != exp_data2[0]
 
-    key3 = "dç\u0010\u0010X"
+    key3 = "dç\u0010\u0010X\u0010\u0020\u0030\u0110\u0120\u0130"
     data3 = "Test Data Ruby\r\nWith 3\r\nlines and UTF key"
     memcache.set key3, data3, timeout
     exp_data3 = memcache.get key3
     throw "Test 3 - not the equal '#{data3}' and '#{exp_data3[0]}'" if data3 != exp_data3[0]
 
     key4 = "ewc"
-    data4 = "Test Data Ruby\r\nWith 3\r\nlines and UTF value: \u0010\u0010\u0010\u0010\u0010\u0010\u0010\u00104Utup8qCEj\u00104"
+    data4 = "Test Data Ruby\r\nWith 3\r\nlines and UTF value: \u0010\u0020\u0030\u0010\u0010\u0010\u0010\u0010\u0010\u0010\u00104Utup8qCEj\u00104"
     memcache.set key4, data4, timeout
     exp_data4 = memcache.get key4
     throw "Test 4 - not the equal '#{data4}' and '#{exp_data4[0]}'" if data4 != exp_data4[0]

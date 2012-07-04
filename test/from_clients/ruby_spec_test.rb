@@ -1,0 +1,266 @@
+# -*- encoding : utf-8 -*-
+# How to run:
+#     rvm 1.9.2
+#     gem install rspec
+#     gem install memcache-client
+#     rspec -fd test/from_clients/ruby_spec_test.rb
+
+require 'rubygems'
+require 'benchmark'
+require 'memcache'
+require 'rspec'
+
+describe "Memcached.JS" do
+  
+  before :each do
+    @memcache = MemCache.new 'localhost:11211'
+  end
+
+  context "with ASCII protocol" do
+  
+    it "should execute a 'get'" do
+      @memcache.get a_small_key
+    end
+  
+    it "should execute a 'set'" do
+      @memcache.set a_small_key, a_small_value
+    end
+
+    it "should execute a 'set' and 'get' the same value" do
+      key   = a_small_key
+      value = a_small_value
+      
+      @memcache.set key, value
+      ret_value = @memcache.get key
+      
+      ret_value.should eq(value)
+    end
+
+    it "should execute a 'set' with medium value and 'get' the same value" do
+      key   = a_small_key
+      value = generate_random_text(1000)
+      
+      @memcache.set key, value
+      ret_value = @memcache.get key
+      
+      ret_value[0].should eq(value)
+    end
+
+    it "should execute a 'set' with binary value and 'get' the same value" do
+      key   = a_small_key
+      value = { 
+        str: generate_random_text(10), 
+        utf: "\u0101\u1101\u2101", 
+        int: 2, 
+        decimal: 3.4, 
+        array: [1, 2, 3], 
+        bin1: "\xE5\xA5\xBD\x00",
+        bin2: "\xE5\xA5\xBD\xEF\xCF\xBF" }
+      
+      @memcache.set key, value
+      ret_value = @memcache.get key
+      puts ret_value
+
+      ret_value[0].should eq(value)
+      
+    end
+
+    it "should execute a 'set' with a utf key and 'get' the same value" do
+      key   = generate_random_utf_text(20)
+      value = a_small_value
+
+      @memcache.set key, value
+      ret_value = @memcache.get key
+
+      ret_value.should eq(value)
+    end
+
+    it "should execute a 'set' with a utf value and 'get' the same value" do
+      key   = a_small_key
+      value = generate_random_utf_text(100)
+      
+      @memcache.set key, value
+      ret_value = @memcache.get key
+
+      ret_value.should eq(value)
+    end
+
+    it "should execute a 'set' with a multi-line value and 'get' the same value" do
+      key   = a_small_key
+      value = "#{a_small_value}\r\n#{a_small_value}\n#{a_small_value}\r#{a_small_value}"
+      
+      @memcache.set key, value
+      ret_value = @memcache.get key
+      
+      ret_value.should eq(value)
+    end
+
+    it "should execute a 'set' with a multi-line terminator at the end of the value and 'get' the same value" do
+      key   = a_small_key
+      value = "#{a_small_value}\r\n"
+      
+      @memcache.set key, value
+      ret_value = @memcache.get key
+      
+      ret_value.should eq(value)
+    end
+
+    it "should execute a 'set' with not expired timeout and 'get' the same value" do
+      key     = a_small_key
+      value   = a_small_value
+      timeout = 10
+
+      @memcache.set key, value, timeout
+      ret_value = @memcache.get key
+      
+      ret_value.should eq(value)
+    end
+
+    it "should execute a 'add'" do
+      @memcache.add a_small_key, a_small_value
+    end
+
+    it "should execute a 'add' and 'get' the same value" do
+      key   = a_small_key
+      value = a_small_value
+      
+      @memcache.add key, value
+      ret_value = @memcache.get key
+      
+      ret_value.should eq(value)
+    end
+
+    it "should execute a 'add' with not expired timeout and 'get' the same value" do
+      key     = a_small_key
+      value   = a_small_value
+      timeout = 10
+
+      @memcache.add key, value, timeout
+      ret_value = @memcache.get key
+      
+      ret_value.should eq(value)
+    end
+
+    it "should execute a 'add' to a pre-existent key and don't get the same value" do
+      key = a_small_key
+      first_value = a_small_value
+      second_value = generate_random_text(300)
+
+      @memcache.set key, first_value
+
+      @memcache.add key, second_value
+      ret_value = @memcache.get key
+      
+      ret_value.should eq(first_value)
+      ret_value.should_not eq(second_value)
+    end
+
+    it "should execute a 'replace'" do
+      @memcache.replace a_small_key, a_small_value
+    end
+
+    it "should execute a 'replace' and 'get' nil" do
+      key   = a_small_key
+      value = a_small_value
+      
+      @memcache.replace key, value
+      ret_value = @memcache.get key
+      
+      ret_value.should nil
+    end
+
+    it "should execute a 'replace' with timeout and 'get' the same value" do
+      key = a_small_key
+      first_value = a_small_value
+      second_value = generate_random_text(300)
+      timeout = 10
+
+      @memcache.set key, first_value
+
+      @memcache.replace key, second_value, timeout
+      ret_value = @memcache.get key
+      
+      ret_value.should_not eq(first_value)
+      ret_value.should eq(second_value)
+    end
+
+    it "should execute a 'replace' to a pre-existent key and 'get' the same value" do
+      key = a_small_key
+      first_value = a_small_value
+      second_value = generate_random_text(300)
+
+      @memcache.set key, first_value
+
+      @memcache.replace key, second_value
+      ret_value = @memcache.get key
+      
+      ret_value.should_not eq(first_value)
+      ret_value.should eq(second_value)
+    end
+
+    it "should execute a 'delete'" do
+      @memcache.delete a_small_key
+    end
+
+    it "should execute a 'delete' and 'get' nil" do
+      key   = a_small_key
+      
+      @memcache.delete key
+      ret_value = @memcache.get key
+      
+      ret_value.should nil
+    end
+
+    it "should execute a 'delete' to a pre-existent key and 'get' nil" do
+      key = a_small_key
+      value = a_small_value
+
+      @memcache.set key, value
+
+      @memcache.delete key
+      ret_value = @memcache.get key
+      
+      ret_value.should nil
+    end
+
+    it "should execute a 'get' with multi keys" do
+      keys = [a_small_key, a_small_key, a_small_key]
+      @memcache.get keys
+    end
+
+    it "should execute a 'set' on multi keys and 'get' the same value" do
+      keys = [a_small_key, a_small_key, a_small_key]
+      values = [a_small_value, a_small_value, a_small_value]
+      hash = Hash[keys.zip(values)]
+
+      hash.each_key do |key| @memcache.set key, hash[key] end
+
+      ret_value = @memcache.get keys[0], keys[1], keys[2]
+      
+      ret_value.should eq(values)
+    end
+
+  end
+
+  def a_small_key
+    "K_#{generate_random_text 10}"
+  end
+
+  def a_small_value
+    "V_#{generate_random_text 50}"
+  end
+
+  def generate_random_text (length)
+    chars = 'ABCDEFGHJKLMNOPQRSTUVWXYZ23456789'
+    text = ''
+    length.times { |i| text << chars[rand(chars.length)] }
+    text
+  end
+
+  def generate_random_utf_text (length)
+    chars = "\u0001\u0010\u0020\u0030\u0079"
+    text = ''
+    length.times { |i| text << chars[rand(chars.length)] }
+    text
+  end
+end
