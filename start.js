@@ -5,7 +5,7 @@ var log = require('./lib/memcached.log.js');
 //var profiler = require('v8-profiler');
 
 global.memcachedParams = { 
-	verboseLevel: 0 // between 0 and 3;
+	verboseLevel: 1 // between 0 and 3;
 }
 var maxCacheSize = 64; // Megabytes
 var memcached = new mc.Memcached(maxCacheSize);
@@ -22,7 +22,7 @@ var server = net.createServer(function (socket) {
 		log.write(function(){ return "CLIENT sending data: [" + log.short(data) + "]"}, 1);
 		
 		dataHandler.process(data, function(result) {
-			log.write(function(){ return "CLIENT receving data: [" + log.short(result) + "]"}, 1);
+			log.write(function(){ return "SERVER sending data: [" + log.short(result) + "]"}, 1);
 			socket.write(result);
 		});
 	
