@@ -56,8 +56,6 @@ Currently, the project is Alpha (version 0.0.4), not tested in production enviro
 
 I haven't done any serious performance test, just simple ones. Compared with the original memcached written in C, memcached.js performance is between 30% and 50% slower. The situation may worsen as new functionality is added (currently, it's ~ 750 of javascript LOC against ~ 7500 of C LOC, according to [CLOC](http://sourceforge.net/projects/cloc/)). At the same time, it can be improved since no optimization has been done yet and I can see many places where it could do better.
 
-JavaScript is a new language for me (at least on the server side). So the code may look a lot like a Java or C# code. Tips on how to improve the code are more than welcome. 
-
 Tested on Node.js since version v0.3.6-pre. Last check: Node.js v0.8.0
 
 Clients tested:
