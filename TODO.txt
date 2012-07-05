@@ -1,9 +1,7 @@
 TODO r1
 =======
 - Verify max size on storage commands
-- TESTs!
 - Improve commands validation
-- move ruby tests to memcached-client
 
 TODO r2
 =======
