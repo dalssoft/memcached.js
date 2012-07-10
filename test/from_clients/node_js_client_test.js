@@ -4,7 +4,7 @@
 *	https://github.com/vanillahsu/node-memcache 
 */
 var assert = require('assert');
-var sys      = require('sys');
+var sys      = require('util');
 var memcache = require('../../../node-memcache/lib/memcache.js');
 
 function microtime(get_as_float) {  
