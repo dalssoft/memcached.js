@@ -4,8 +4,11 @@ var mc = require('./lib/memcached.js');
 var log = require('./lib/memcached.log.js');
 //var profiler = require('v8-profiler');
 
-global.memcachedParams = { 
-	verboseLevel: 0 // between 0 and 3;
+global.memcachedParams = {
+	log: {
+		verboseLevel: 0, // between 0 and 3;
+		highlight: function(log) { return (log.indexOf("ResponsePackage.buildResponseBuffer:") >= 0) }	
+	}
 }
 var maxCacheSize = 64; // Megabytes
 var memcached = new mc.Memcached(maxCacheSize);
