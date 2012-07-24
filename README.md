@@ -29,12 +29,12 @@ This version:
 	* On the other hand, the cache operates on algorithms with O(1) complexity. No complex timers / triggers. Just a hash and linked list.
 	* And of course, it uses the non-blocking event machine provided by Node.js
 * Supported commands on this version: get, set, flush_all, delete, add, replace, stats 
+* ASCII and (Alpha) Binary memcached protocol
 
 
 ## What it doesn't do?
 
 * It is not a client for memcached 
-* Binary memcached protocol, only ASCII
 * UDP protocol
 * cas, gets, append, prepend, version, quit, incr and decr commands
 * delete queue

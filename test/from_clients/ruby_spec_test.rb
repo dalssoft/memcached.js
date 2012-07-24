@@ -88,6 +88,50 @@ describe "Memcached.JS" do
       ret_value.should eq(value)
     end
 
+    it "should execute a 'set' with a multi-line value and 'get' the same value" do
+      key   = a_small_key
+      value = "#{a_small_value}\r\n#{a_small_value}\n#{a_small_value}\r#{a_small_value}"
+      
+      @memcache.set key, value
+      ret_value = @memcache.get key
+      
+      ret_value.should eq(value)
+    end
+
+    it "should execute a 'set' with a multi-line terminator at the end of the value and 'get' the same value" do
+      key   = a_small_key
+      value = "#{a_small_value}\r\n"
+      
+      @memcache.set key, value
+      ret_value = @memcache.get key
+      
+      ret_value.should eq(value)
+    end
+
+    it "should execute a 'set' with a non expired timeout and 'get' the same value" do
+      key     = a_small_key
+      value   = a_small_value
+      timeout = 10
+
+      @memcache.set key, value, timeout
+      ret_value = @memcache.get key
+      
+      ret_value.should eq(value)
+    end
+
+    it "should execute a 'set' with a expired timeout and 'get' no value" do
+      key     = a_small_key
+      value   = a_small_value
+      timeout = 1
+
+      @memcache.set key, value, timeout
+      sleep(1.1)
+      ret_value = @memcache.get key
+      
+      ret_value.should nil
+    end
+
+
   end
 
 
@@ -155,37 +199,6 @@ describe "Memcached.JS" do
       @memcache.set key, value
       ret_value = @memcache.get key
 
-      ret_value.should eq(value)
-    end
-
-    it "should execute a 'set' with a multi-line value and 'get' the same value" do
-      key   = a_small_key
-      value = "#{a_small_value}\r\n#{a_small_value}\n#{a_small_value}\r#{a_small_value}"
-      
-      @memcache.set key, value
-      ret_value = @memcache.get key
-      
-      ret_value.should eq(value)
-    end
-
-    it "should execute a 'set' with a multi-line terminator at the end of the value and 'get' the same value" do
-      key   = a_small_key
-      value = "#{a_small_value}\r\n"
-      
-      @memcache.set key, value
-      ret_value = @memcache.get key
-      
-      ret_value.should eq(value)
-    end
-
-    it "should execute a 'set' with not expired timeout and 'get' the same value" do
-      key     = a_small_key
-      value   = a_small_value
-      timeout = 10
-
-      @memcache.set key, value, timeout
-      ret_value = @memcache.get key
-      
       ret_value.should eq(value)
     end
 
