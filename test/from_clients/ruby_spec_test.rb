@@ -4,7 +4,7 @@
 #     gem install rspec
 #     gem install memcache-client
 #     gem install dalli
-#     rspec -fd test/from_clients/ruby_spec_test.rb
+#     rspec -fd -c test/from_clients/ruby_spec_test.rb
 
 require 'rubygems'
 require 'benchmark'
@@ -19,43 +19,11 @@ end
 
 describe "Memcached.JS" do
 
-  context "with BINARY protocol", :broken => true do
-    
-    before :each do
-      Dalli.logger.level = Logger::DEBUG
-      @memcache = Dalli::Client.new('localhost:11211', :compress => false)
-    end
-
+  shared_examples_for "any protocol" do
     it "should execute a 'get'" do
       @memcache.get a_small_key
     end
 
-    it "should execute a 'set'" do
-      @memcache.set a_small_key, a_small_value
-    end
-
-    it "should execute a 'set' and 'get' the same value", :focus => true do
-      key   = a_small_key
-      value = a_small_value
-      
-      @memcache.set key, value
-      ret_value = @memcache.get key
-      
-      ret_value.should eq(value)
-    end
-
-  end 
-  
-  context "with ASCII protocol" do
-    
-    before :each do
-      @memcache = MemCache.new 'localhost:11211'
-    end
-
-    it "should execute a 'get'" do
-      @memcache.get a_small_key
-    end
-  
     it "should execute a 'set'" do
       @memcache.set a_small_key, a_small_value
     end
@@ -78,31 +46,6 @@ describe "Memcached.JS" do
       ret_value = @memcache.get key
       
       ret_value.should eq(value)
-    end
-
-    it "should execute a 'set' with 1MB value and 'get' the same value" do
-      key   = a_small_key
-      value = generate_random_text(1048400)
-      
-      @memcache.set key, value
-      ret_value = @memcache.get key
-      
-      ret_value.should eq(value)
-    end
-
-    it "should execute a two consecutive 'set' with 1MB value and 'get' the same value" do
-      key1   = a_small_key
-      value1 = generate_random_text(1048400)
-      key2   = a_small_key
-      value2 = generate_random_text(1048400)
-      
-      @memcache.set key1, value1
-      @memcache.set key2, value2
-      ret_value1 = @memcache.get key1
-      ret_value2 = @memcache.get key2
-      
-      ret_value1.should eq(value1)
-      ret_value2.should eq(value2)
     end
 
     it "should execute a 'set' with binary value and 'get' the same value" do
@@ -135,20 +78,80 @@ describe "Memcached.JS" do
       
     end
 
-    it "should execute a 'set' with a utf key and 'get' the same value", :broken => true do
-      key   = generate_random_utf_text(10)
-      value = a_small_value
-
+    it "should execute a 'set' with a utf value and 'get' the same value" do
+      key   = a_small_key
+      value = generate_random_utf_text(100)
+      
       @memcache.set key, value
       ret_value = @memcache.get key
 
       ret_value.should eq(value)
     end
 
-    it "should execute a 'set' with a utf value and 'get' the same value" do
+  end
+
+
+
+  context "with BINARY protocol" do
+    
+    before :each do
+      #Dalli.logger.level = Logger::DEBUG
+      @memcache = Dalli::Client.new('localhost:11211', :compress => false, :socket_timeout => 3)
+    end
+
+    it_behaves_like "any protocol"
+
+    it "should execute a 'set' with 1MB value and 'get' the same value", :broken => true do
       key   = a_small_key
-      value = generate_random_utf_text(100)
+      value = generate_random_text(1048400)
       
+      @memcache.set key, value
+      ret_value = @memcache.get key
+      
+      ret_value.should eq(value)
+    end
+
+  end 
+  
+
+
+  context "with ASCII protocol" do
+    
+    before :each do
+      @memcache = MemCache.new 'localhost:11211'
+    end
+    
+    it_behaves_like "any protocol"
+
+    it "should execute a 'set' with 1MB value and 'get' the same value" do
+      key   = a_small_key
+      value = generate_random_text(1048400)
+      
+      @memcache.set key, value
+      ret_value = @memcache.get key
+      
+      ret_value.should eq(value)
+    end
+
+    it "should execute a two consecutive 'set' with 1MB value and 'get' the same value" do
+      key1   = a_small_key
+      value1 = generate_random_text(1048400)
+      key2   = a_small_key
+      value2 = generate_random_text(1048400)
+      
+      @memcache.set key1, value1
+      @memcache.set key2, value2
+      ret_value1 = @memcache.get key1
+      ret_value2 = @memcache.get key2
+      
+      ret_value1.should eq(value1)
+      ret_value2.should eq(value2)
+    end
+
+    it "should execute a 'set' with a utf key and 'get' the same value", :broken => true do
+      key   = generate_random_utf_text(10)
+      value = a_small_value
+
       @memcache.set key, value
       ret_value = @memcache.get key
 
