@@ -131,42 +131,6 @@ describe "Memcached.JS" do
       ret_value.should nil
     end
 
-
-  end
-
-
-
-  context "with BINARY protocol" do
-    
-    before :each do
-      #Dalli.logger.level = Logger::DEBUG
-      @memcache = Dalli::Client.new('localhost:11211', :compress => false, :socket_timeout => 3)
-    end
-
-    it_behaves_like "any protocol"
-
-    it "should execute a 'set' with 1MB value and 'get' the same value", :broken => true do
-      key   = a_small_key
-      value = generate_random_text(1048400)
-      
-      @memcache.set key, value
-      ret_value = @memcache.get key
-      
-      ret_value.should eq(value)
-    end
-
-  end 
-  
-
-
-  context "with ASCII protocol" do
-    
-    before :each do
-      @memcache = MemCache.new 'localhost:11211'
-    end
-    
-    it_behaves_like "any protocol"
-
     it "should execute a 'set' with 1MB value and 'get' the same value" do
       key   = a_small_key
       value = generate_random_text(1048400)
@@ -190,6 +154,47 @@ describe "Memcached.JS" do
       
       ret_value1.should eq(value1)
       ret_value2.should eq(value2)
+    end
+
+  end
+
+
+
+  context "with BINARY protocol" do
+    
+    before :each do
+      #Dalli.logger.level = Logger::DEBUG
+      @memcache = Dalli::Client.new('localhost:11211', :compress => false, :socket_timeout => 3)
+    end
+
+    it_behaves_like "any protocol"
+
+  end 
+  
+  context "with ASCII protocol" do
+    
+    before :each do
+      @memcache = MemCache.new 'localhost:11211'
+    end
+    
+    it_behaves_like "any protocol"
+
+    it "should execute a 'get' with multi keys" do
+      keys = [a_small_key, a_small_key, a_small_key]
+      @memcache.get_multi keys
+    end
+
+    it "should execute a 'set' on multi keys and 'get' the same value" do
+      keys = [a_small_key, a_small_key, a_small_key]
+      values = [a_small_value, a_small_value, a_small_value]
+      hash = Hash[keys.zip(values)]
+
+      hash.each_key do |key| @memcache.set key, hash[key] end
+
+      ret_value = @memcache.get_multi keys
+      0.upto 2 do |x|
+        ret_value[keys[x]].should eq(values[x])
+      end
     end
 
     it "should execute a 'set' with a utf key and 'get' the same value", :broken => true do
@@ -307,24 +312,6 @@ describe "Memcached.JS" do
       ret_value = @memcache.get key
       
       ret_value.should nil
-    end
-
-    it "should execute a 'get' with multi keys" do
-      keys = [a_small_key, a_small_key, a_small_key]
-      @memcache.get_multi keys
-    end
-
-    it "should execute a 'set' on multi keys and 'get' the same value" do
-      keys = [a_small_key, a_small_key, a_small_key]
-      values = [a_small_value, a_small_value, a_small_value]
-      hash = Hash[keys.zip(values)]
-
-      hash.each_key do |key| @memcache.set key, hash[key] end
-
-      ret_value = @memcache.get_multi keys
-      0.upto 2 do |x|
-        ret_value[keys[x]].should eq(values[x])
-      end
     end
 
   end
