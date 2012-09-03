@@ -164,10 +164,28 @@ describe "Memcached.JS" do
     
     before :each do
       #Dalli.logger.level = Logger::DEBUG
-      @memcache = Dalli::Client.new('localhost:11211', :compress => false, :socket_timeout => 3)
+      @memcache = Dalli::Client.new('localhost:11211', :compress => false, :socket_timeout => 60)
     end
 
     it_behaves_like "any protocol"
+
+    it "should execute a 'get' with multi keys", :broken => true do
+      keys = [a_small_key, a_small_key, a_small_key]
+      @memcache.get_multi keys
+    end
+
+    it "should execute a 'set' on multi keys and 'get' the same value", :broken => true do
+      keys = [a_small_key, a_small_key, a_small_key]
+      values = [a_small_value, a_small_value, a_small_value]
+      hash = Hash[keys.zip(values)]
+
+      hash.each_key do |key| @memcache.set key, hash[key] end
+
+      ret_value = @memcache.get_multi keys
+      0.upto 2 do |x|
+        ret_value[keys[x]].should eq(values[x])
+      end
+    end
 
   end 
   
