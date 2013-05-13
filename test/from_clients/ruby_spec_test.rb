@@ -13,8 +13,8 @@ require 'dalli'
 require 'rspec'
 
 RSpec.configure do |c|
-  #c.filter_run :focus => true
-  c.filter_run_excluding :broken => true
+  c.filter_run :focus => true
+  #c.filter_run_excluding :broken => true
 end
 
 describe "Memcached.JS" do
@@ -31,20 +31,20 @@ describe "Memcached.JS" do
     it "should execute a 'set' and 'get' the same value" do
       key   = a_small_key
       value = a_small_value
-      
+
       @memcache.set key, value
       ret_value = @memcache.get key
-      
+
       ret_value.should eq(value)
     end
 
     it "should execute a 'set' with medium value and 'get' the same value" do
       key   = a_small_key
       value = generate_random_text(1000)
-      
+
       @memcache.set key, value
       ret_value = @memcache.get key
-      
+
       ret_value.should eq(value)
     end
 
@@ -52,36 +52,36 @@ describe "Memcached.JS" do
       key   = a_small_key
       value = {
         bin: "\xE5\xA5\xBD\xEF\xCF\xBF" }
-      
+
       @memcache.set key, value
       ret_value = @memcache.get key
 
       ret_value.should eq(value)
-      
+
     end
 
     it "should execute a 'set' with complex object value and 'get' the same value" do
       key   = a_small_key
-      value = { 
-        str: generate_random_text(10), 
-        utf: "\u0101\u1101\u2101", 
-        int: 2, 
-        decimal: 3.4, 
-        array: [1, 2, 3], 
+      value = {
+        str: generate_random_text(10),
+        utf: "\u0101\u1101\u2101",
+        int: 2,
+        decimal: 3.4,
+        array: [1, 2, 3],
         bin1: "\xE5\xA5\xBD\x00",
         bin2: "\xE5\xA5\xBD\xEF\xCF\xBF" }
-      
+
       @memcache.set key, value
       ret_value = @memcache.get key
 
       ret_value.should eq(value)
-      
+
     end
 
     it "should execute a 'set' with a utf value and 'get' the same value" do
       key   = a_small_key
       value = generate_random_utf_text(100)
-      
+
       @memcache.set key, value
       ret_value = @memcache.get key
 
@@ -91,20 +91,20 @@ describe "Memcached.JS" do
     it "should execute a 'set' with a multi-line value and 'get' the same value" do
       key   = a_small_key
       value = "#{a_small_value}\r\n#{a_small_value}\n#{a_small_value}\r#{a_small_value}"
-      
+
       @memcache.set key, value
       ret_value = @memcache.get key
-      
+
       ret_value.should eq(value)
     end
 
     it "should execute a 'set' with a multi-line terminator at the end of the value and 'get' the same value" do
       key   = a_small_key
       value = "#{a_small_value}\r\n"
-      
+
       @memcache.set key, value
       ret_value = @memcache.get key
-      
+
       ret_value.should eq(value)
     end
 
@@ -115,7 +115,7 @@ describe "Memcached.JS" do
 
       @memcache.set key, value, timeout
       ret_value = @memcache.get key
-      
+
       ret_value.should eq(value)
     end
 
@@ -127,17 +127,17 @@ describe "Memcached.JS" do
       @memcache.set key, value, timeout
       sleep(1.1)
       ret_value = @memcache.get key
-      
+
       ret_value.should nil
     end
 
     it "should execute a 'set' with 1MB value and 'get' the same value" do
       key   = a_small_key
       value = generate_random_text(1048400)
-      
+
       @memcache.set key, value
       ret_value = @memcache.get key
-      
+
       ret_value.should eq(value)
     end
 
@@ -146,12 +146,12 @@ describe "Memcached.JS" do
       value1 = generate_random_text(1048400)
       key2   = a_small_key
       value2 = generate_random_text(1048400)
-      
+
       @memcache.set key1, value1
       @memcache.set key2, value2
       ret_value1 = @memcache.get key1
       ret_value2 = @memcache.get key2
-      
+
       ret_value1.should eq(value1)
       ret_value2.should eq(value2)
     end
@@ -161,7 +161,7 @@ describe "Memcached.JS" do
 
 
   context "with BINARY protocol" do
-    
+
     before :each do
       #Dalli.logger.level = Logger::DEBUG
       @memcache = Dalli::Client.new('localhost:11211', :compress => false, :socket_timeout => 60)
@@ -169,12 +169,12 @@ describe "Memcached.JS" do
 
     it_behaves_like "any protocol"
 
-    it "should execute a 'get' with multi keys", :broken => true do
+    it "should execute a 'get' with multi keys", :focus => true do
       keys = [a_small_key, a_small_key, a_small_key]
       @memcache.get_multi keys
     end
 
-    it "should execute a 'set' on multi keys and 'get' the same value", :broken => true do
+    it "should execute a 'set' on multi keys and 'get' the same value", :focus => true do
       keys = [a_small_key, a_small_key, a_small_key]
       values = [a_small_value, a_small_value, a_small_value]
       hash = Hash[keys.zip(values)]
@@ -187,14 +187,14 @@ describe "Memcached.JS" do
       end
     end
 
-  end 
-  
+  end
+
   context "with ASCII protocol" do
-    
+
     before :each do
       @memcache = MemCache.new 'localhost:11211'
     end
-    
+
     it_behaves_like "any protocol"
 
     it "should execute a 'get' with multi keys" do
@@ -232,10 +232,10 @@ describe "Memcached.JS" do
     it "should execute a 'add' and 'get' the same value" do
       key   = a_small_key
       value = a_small_value
-      
+
       @memcache.add key, value
       ret_value = @memcache.get key
-      
+
       ret_value.should eq(value)
     end
 
@@ -246,7 +246,7 @@ describe "Memcached.JS" do
 
       @memcache.add key, value, timeout
       ret_value = @memcache.get key
-      
+
       ret_value.should eq(value)
     end
 
@@ -259,7 +259,7 @@ describe "Memcached.JS" do
 
       @memcache.add key, second_value
       ret_value = @memcache.get key
-      
+
       ret_value.should eq(first_value)
       ret_value.should_not eq(second_value)
     end
@@ -271,10 +271,10 @@ describe "Memcached.JS" do
     it "should execute a 'replace' and 'get' nil" do
       key   = a_small_key
       value = a_small_value
-      
+
       @memcache.replace key, value
       ret_value = @memcache.get key
-      
+
       ret_value.should nil
     end
 
@@ -288,7 +288,7 @@ describe "Memcached.JS" do
 
       @memcache.replace key, second_value, timeout
       ret_value = @memcache.get key
-      
+
       ret_value.should_not eq(first_value)
       ret_value.should eq(second_value)
     end
@@ -302,7 +302,7 @@ describe "Memcached.JS" do
 
       @memcache.replace key, second_value
       ret_value = @memcache.get key
-      
+
       ret_value.should_not eq(first_value)
       ret_value.should eq(second_value)
     end
@@ -313,10 +313,10 @@ describe "Memcached.JS" do
 
     it "should execute a 'delete' and 'get' nil" do
       key   = a_small_key
-      
+
       @memcache.delete key
       ret_value = @memcache.get key
-      
+
       ret_value.should nil
     end
 
@@ -328,7 +328,7 @@ describe "Memcached.JS" do
 
       @memcache.delete key
       ret_value = @memcache.get key
-      
+
       ret_value.should nil
     end
 
