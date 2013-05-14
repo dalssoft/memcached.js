@@ -13,8 +13,8 @@ require 'dalli'
 require 'rspec'
 
 RSpec.configure do |c|
-  c.filter_run :focus => true
-  #c.filter_run_excluding :broken => true
+  #c.filter_run :focus => true
+  c.filter_run_excluding :broken => true
 end
 
 describe "Memcached.JS" do
@@ -174,7 +174,7 @@ describe "Memcached.JS" do
       @memcache.get_multi keys
     end
 
-    it "should execute a 'set' on multi keys and 'get' the same value", :focus => true do
+    it "should execute a 'set' on multi keys and 'get' the same value" do
       keys = [a_small_key, a_small_key, a_small_key]
       values = [a_small_value, a_small_value, a_small_value]
       hash = Hash[keys.zip(values)]
