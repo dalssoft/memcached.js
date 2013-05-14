@@ -169,7 +169,7 @@ describe "Memcached.JS" do
 
     it_behaves_like "any protocol"
 
-    it "should execute a 'get' with multi keys", :focus => true do
+    it "should execute a 'get' with multi keys" do
       keys = [a_small_key, a_small_key, a_small_key]
       @memcache.get_multi keys
     end

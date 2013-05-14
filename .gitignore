@@ -2,3 +2,4 @@ test/from_clients/quick_test.rb
 v8.log
 prof_rpt.txt
 .vagrant
+tcpdump.*
