@@ -20,6 +20,7 @@ end
 describe "Memcached.JS" do
 
   shared_examples_for "any protocol" do
+
     it "should execute a 'get'" do
       @memcache.get a_small_key
     end
@@ -129,6 +130,26 @@ describe "Memcached.JS" do
       ret_value = @memcache.get key
 
       ret_value.should nil
+    end
+
+    it "should execute a 'set' with medium value and 'get' the same value" do
+      key   = a_small_key
+      value = a_medium_value
+
+      @memcache.set key, value
+      ret_value = @memcache.get key
+
+      ret_value.should eq(value)
+    end
+
+    it "should execute a 'set' with large value and 'get' the same value" do
+      key   = a_small_key
+      value = a_large_value
+
+      @memcache.set key, value
+      ret_value = @memcache.get key
+
+      ret_value.should eq(value)
     end
 
     it "should execute a 'set' with 1MB value and 'get' the same value" do
@@ -351,6 +372,14 @@ describe "Memcached.JS" do
 
   def a_small_value
     "V_#{generate_random_text 50}"
+  end
+
+  def a_medium_value
+    "V_#{generate_random_text 500}"
+  end
+
+  def a_large_value
+    "V_#{generate_random_text 5000}"
   end
 
   def generate_random_text (length)
