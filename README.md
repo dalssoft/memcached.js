@@ -1,8 +1,8 @@
 	______  ___                                        ______        _________  _________________
 	___   |/  /_____ _______ ___ _____________ ___________  /_ _____ ______  /  ______  /__  ___/
-	__  /|_/ / _  _ \__  __ `__ \_  ___/_  __ `/_  ___/__  __ \_  _ \_  __  /   ___ _  / _____ \ 
-	_  /  / /  /  __/_  / / / / // /__  / /_/ / / /__  _  / / //  __// /_/ /___ / /_/ /  ____/ / 
-	/_/  /_/   \___/ /_/ /_/ /_/ \___/  \__,_/  \___/  /_/ /_/ \___/ \__,_/ _(_)\____/   /____/ 
+	__  /|_/ / _  _ \__  __ `__ \_  ___/_  __ `/_  ___/__  __ \_  _ \_  __  /   ___ _  / _____ \
+	_  /  / /  /  __/_  / / / / // /__  / /_/ / / /__  _  / / //  __// /_/ /___ / /_/ /  ____/ /
+	/_/  /_/   \___/ /_/ /_/ /_/ \___/  \__,_/  \___/  /_/ /_/ \___/ \__,_/ _(_)\____/   /____/
 
 
 # Memcached.js
@@ -11,12 +11,12 @@ Memcached.js is a port of [Memcached](http://memcached.org/) to Javascript, runn
 ## Install
 
 	git clone git://github.com/dalssoft/memcached.js.git
-	cd memcached.js	
+	cd memcached.js
 	node start.js
 
 ## What does it do?
 
-From the original project: 
+From the original project:
 
 "Free & open source, high-performance, distributed memory object caching system, generic in nature, but intended for use in speeding up dynamic web applications by alleviating database load.
 
@@ -28,13 +28,13 @@ This version:
 	* Well, not completely true: adding and removing items to cache allocate memory dynamically, because it doesn't allocate memory upfront when the server starts. So, it may take sometime allocating memory. We will fix it in the future, but for now, it probably won't hurt you.
 	* On the other hand, the cache operates on algorithms with O(1) complexity. No complex timers / triggers. Just a hash and linked list.
 	* And of course, it uses the non-blocking event machine provided by Node.js
-* Supported commands on this version: get, set, flush_all, delete, add, replace, stats 
+* Supported commands on this version: get, set, flush_all, delete, add, replace, stats
 * ASCII and (Alpha) Binary memcached protocol
 
 
 ## What it doesn't do?
 
-* It is not a client for memcached 
+* It is not a client for memcached
 * UDP protocol
 * cas, gets, append, prepend, version, quit, incr and decr commands
 * delete queue
@@ -52,11 +52,11 @@ However, if you fetch an expired item, memcached.js will find the item, notice t
 Items can also be evicted to make way for new items that need to be stored. But before that, we will try to drop a few expired items at the end of the list.
 
 ## Current State
-Currently, the project is Alpha (version 0.0.4), not tested in production enviroment. However, it was tested using diferent scenarios and condition, with different clients (see /test/from_clients folder and the list below). 
+Currently, the project is Alpha (version 0.0.4), not tested in production enviroment. However, it was tested using diferent scenarios and condition, with different clients (see /test/from_clients folder and the list below).
 
 I haven't done any serious performance test, just simple ones. Compared with the original memcached written in C, memcached.js performance is between 30% and 50% slower. The situation may worsen as new functionality is added (currently, it's ~ 1000 of javascript LOC against ~ 7500 of C LOC, according to [CLOC](http://sourceforge.net/projects/cloc/)). At the same time, it can be improved since no optimization has been done yet and I can see many places where it could do better.
 
-Tested on Node.js since version v0.3.6-pre. Last check: Node.js v0.8.0
+Tested on Node.js since version v0.3.6-pre. Last check: Node.js v0.10.5
 
 Clients tested:
 
@@ -84,8 +84,43 @@ Perl:
 
 	cd memcached.js
 	node start.js
-	
+
 On the client side:
 
 	telnet localhost 11211
 	stats
+
+Test:
+
+    rspec -fd -c test/from_clients/ruby_spec_test.rb
+
+## Implemented commands
+
+              ASCII    Bin
+    Get         X       X
+    Set         X       X
+    Add         X       X
+    Replace     X       X
+    Delete      X
+    Increment
+    Decrement
+    Quit
+    Flush
+    GetQ
+    No-op
+    Version
+    GetK
+    GetKQ               X
+    Append
+    Prepend
+    Stat        X
+    SetQ
+    AddQ
+    ReplaceQ
+    DeleteQ
+    IncrementQ
+    DecrementQ
+    QuitQ
+    FlushQ
+    AppendQ
+    PrependQ
