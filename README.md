@@ -101,11 +101,11 @@ Test:
     Set         X       X
     Add         X       X
     Replace     X       X
-    Delete      X
+    Delete      X       X
     Increment
     Decrement
     Quit
-    Flush
+    Flush       X       X
     GetQ
     No-op
     Version
