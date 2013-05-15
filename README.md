@@ -107,8 +107,8 @@ Test:
     Quit
     Flush       X       X
     GetQ
-    No-op
-    Version
+    No-op               X
+    Version             X
     GetK
     GetKQ               X
     Append
