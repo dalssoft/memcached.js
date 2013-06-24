@@ -3,6 +3,8 @@ var util = require('util');
 var mc = require('./lib/memcached.js');
 var log = require('./lib/memcached.log.js');
 //var profiler = require('v8-profiler');
+//var heapdump = require('heapdump');
+//heapdump.writeSnapshot();
 
 global.memcachedParams = {
 	log: {

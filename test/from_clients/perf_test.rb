@@ -7,10 +7,10 @@ require 'dalli'
 #memcache = MemCache.new('localhost:11211')
 memcache = Dalli::Client.new('localhost:11211', :compress => false, :socket_timeout => 60)
 
-n = 800
+n = 2000
 value = ""
-(1048000).times do |x| value << ('.') end
-#(10480).times do |x| value << ('.') end
+bytes = 1048000 #1048000
+(bytes).times do |x| value << ('.') end
 
 n.times do |x|
 
@@ -19,7 +19,7 @@ n.times do |x|
   #puts key, value.length
   memcache.set key, value, 100000
 
-  if x % 20 == 0
+  if x % 5 == 0
     start = Time.now
 
     key_test = "smail_" + x.to_s
@@ -28,7 +28,7 @@ n.times do |x|
     memcache.get key_test
 
     elapsed = Time.now - start
-    puts "#{x}|#{elapsed}"
+    puts "#{x} #{elapsed}"
     #puts key_test, value_test.length
   end
 

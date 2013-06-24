@@ -21,6 +21,6 @@ exec { 'apt-get update2':
   timeout => 0
 } ->
 
-package { ['git', 'nodejs', 'figlet', 'ruby1.9.3']:
+package { ['git', 'nodejs', 'figlet', 'ruby1.9.3', 'build-essential']:
   ensure => present
 }

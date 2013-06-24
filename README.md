@@ -29,10 +29,10 @@ This version:
 	* On the other hand, the cache operates on algorithms with O(1) complexity. No complex timers / triggers. Just a hash and linked list.
 	* And of course, it uses the non-blocking event machine provided by Node.js
 * Supported commands on this version: get, set, flush_all, delete, add, replace, stats
-* ASCII and (Alpha) Binary memcached protocol
+* ASCII and Binary memcached protocol
 
 
-## What it doesn't do?
+## What it doesn't do (yet)?
 
 * It is not a client for memcached
 * UDP protocol
@@ -43,6 +43,11 @@ This version:
 * Sophisticated cache strategies. All it does right now is the the old and good LRU, for all items. No discrimination.
 	* However, now it uses the same heuristic that the original project uses to clean expired items when it needs more space.
 
+## Project goals (sanity is not a prerequisite)
+
+1. Reach the same performance as C implementation
+2. Implement the same set of features the original project have
+3. Be a hackable memcached implementation
 
 ## 	When Memory Is Reclaimed
 Memory for an item is not actively reclaimed. If you store an item and it expires, it sits in the LRU cache at its position until it falls to the end and is reused.
