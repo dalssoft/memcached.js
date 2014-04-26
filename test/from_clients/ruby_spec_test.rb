@@ -13,7 +13,7 @@ require 'dalli'
 require 'rspec'
 
 RSpec.configure do |c|
-  #c.filter_run :focus => true
+  # c.filter_run :focus => true
   c.filter_run_excluding :broken => true
 end
 
