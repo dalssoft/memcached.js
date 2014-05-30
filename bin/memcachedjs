@@ -14,10 +14,11 @@ var help = [
     'Starts a memcached server',
     '',
     'options:',
-    '   --port [port]   Port to bind service',
-    '   --host [host]   Host to bind service',
-    '   --log  [nivel]  Enable logs (between 0 and 3)',
-    '   -h, --help      Display help'
+    '   --socket [socket] Run server in a unix socket file',
+    '   --port [port]     Port to bind service',
+    '   --host [host]     Host to bind service',
+    '   --log  [nivel]    Enable logs (between 0 and 3)',
+    '   -h, --help        Display help'
 ].join('\n');
 
 var argv = require('minimist')(process.argv.slice(2));
@@ -79,14 +80,33 @@ var server = net.createServer(function (socket) {
 (function() {
   var port = argv.port || 11211;
   var host = argv.host || "127.0.0.1";
-  server.listen(port, host, function(err) {
+  var socket = argv.socket ? argv.socket : null;
+
+  var callback = function(err) {
     if (err) {
       util.error(err);
       return process.exit(1);
     }
     log.write(function() {
-      return 'SERVER is running ' + host + ':' + port;
+      return 'SERVER is running ' + ((socket) ? socket : (host + ':' + port));
     }, 1);
-  });
+
+    var gracefullExit = function() {
+      log.write(function() {
+        return 'SERVER stoping... ';
+      }, 1);
+      server.close();
+    }
+
+    process.on('SIGTERM', gracefullExit);
+    process.on('SIGINT' , gracefullExit);
+    process.on('SIGQUIT', gracefullExit);
+  };
+
+  if (socket) {
+    server.listen(socket, callback);
+  } else {
+    server.listen(port, host, callback);
+  }
 })();
 
