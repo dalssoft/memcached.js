@@ -1,0 +1,112 @@
+#!/bin/sh
+':' //; exec "$(command -v nodejs || command -v node)" -- "$0" "$@"
+
+'use strict';
+
+var mc   = require('../lib/memcached.js'),
+    log  = require('../lib/memcached.log.js'),
+    util = require('util'),
+    net  = require('net');
+
+var help = [
+    'usage: memcachedjs [options]',
+    '',
+    'Starts a memcached server',
+    '',
+    'options:',
+    '   --socket [socket] Run server in a unix socket file',
+    '   --port [port]     Port to bind service',
+    '   --host [host]     Host to bind service',
+    '   --log  [nivel]    Enable logs (between 0 and 3)',
+    '   -h, --help        Display help'
+].join('\n');
+
+var argv = require('minimist')(process.argv.slice(2));
+if (argv.h || argv.help) {
+  return util.puts(help);
+}
+
+global.memcachedParams = {
+  log: {
+    verboseLevel: (argv.log || 0),
+    highlight: function(log) {
+      return (log.indexOf("ResponsePackage.buildResponseBuffer:") >= 0)
+    }
+  }
+}
+
+var maxCacheSize = 64; // Megabytes
+var memcached    = new mc.Memcached(maxCacheSize);
+
+var server = net.createServer(function (socket) {
+
+  var dataHandler = new mc.MemcachedTCPDataHandler(memcached);
+
+  socket.on("connect", function () {
+    log.write(function(){ return "CLIENT connected"}, 1);
+  });
+
+  socket.on("data", function (data) {
+    log.write(function() {
+      return "CLIENT sending data: [" + log.short(data) + "]"
+    }, 1);
+
+    dataHandler.process(data, function(result) {
+      log.write(function() {
+        return "SERVER sending data: [" + log.short(result) + "]"
+      }, 1);
+      socket.write(result);
+    });
+
+  });
+
+  socket.on("end", function () {
+    log.write(function(){ return "CLIENT disconnected"}, 1);
+  });
+
+  socket.on("timeout", function () {
+    log.write(function(){ return "CLIENT timeout"}, 1);
+  });
+
+  socket.on("error", function (exception) {
+    log.write(function(){ return 'CLIENT error: ' + exception}, 1);
+  });
+
+  socket.on("close", function () {
+    log.write(function(){ return 'CLIENT closed'}, 1);
+  });
+});
+
+(function() {
+  var port = argv.port || 11211;
+  var host = argv.host || "127.0.0.1";
+  var socket = argv.socket ? argv.socket : null;
+
+  var callback = function(err) {
+    if (err) {
+      util.error(err);
+      return process.exit(1);
+    }
+    log.write(function() {
+      return 'SERVER is running ' + ((socket) ? socket : (host + ':' + port));
+    }, 1);
+
+    var gracefullExit = function() {
+      log.write(function() {
+        return 'SERVER stoping... ';
+      }, 1);
+      server.close();
+    }
+
+    process.on('SIGTERM', gracefullExit);
+    process.on('SIGINT' , gracefullExit);
+    process.on('SIGQUIT', gracefullExit);
+  };
+
+  if (socket) {
+    server.listen(socket, callback);
+  } else {
+    server.listen(port, host, callback);
+  }
+})();
+

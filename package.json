@@ -1,0 +1,27 @@
+{
+  "name": "memcachedjs",
+  "version": "0.0.1",
+  "description": "Port of Memcached server for Node.js",
+  "keywords": [
+    "memcached",
+    "cache",
+    "membase",
+    "memcache",
+    "nosql"
+  ],
+  "homepage": "https://github.com/dalssoft/memcached.js",
+  "license": "MIT",
+  "bin": {
+    "memcachedjs": "./bin/memcachedjs"
+  },
+  "directories": {
+    "lib": "./lib"
+  },
+  "dependencies": {
+    "minimist": "0.0.8"
+  },
+  "author": {
+    "name": "David Lojudice Sobrinho",
+    "url": "https://github.com/dalssoft"
+  }
+}
