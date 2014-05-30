@@ -1,18 +1,19 @@
-	______  ___                                        ______        _________  _________________
-	___   |/  /_____ _______ ___ _____________ ___________  /_ _____ ______  /  ______  /__  ___/
-	__  /|_/ / _  _ \__  __ `__ \_  ___/_  __ `/_  ___/__  __ \_  _ \_  __  /   ___ _  / _____ \
-	_  /  / /  /  __/_  / / / / // /__  / /_/ / / /__  _  / / //  __// /_/ /___ / /_/ /  ____/ /
-	/_/  /_/   \___/ /_/ /_/ /_/ \___/  \__,_/  \___/  /_/ /_/ \___/ \__,_/ _(_)\____/   /____/
-
+    ______  ___                                        ______        _________  _________________
+    ___   |/  /_____ _______ ___ _____________ ___________  /_ _____ ______  /  ______  /__  ___/
+    __  /|_/ / _  _ \__  __ `__ \_  ___/_  __ `/_  ___/__  __ \_  _ \_  __  /   ___ _  / _____ \
+    _  /  / /  /  __/_  / / / / // /__  / /_/ / / /__  _  / / //  __// /_/ /___ / /_/ /  ____/ /
+    /_/  /_/   \___/ /_/ /_/ /_/ \___/  \__,_/  \___/  /_/ /_/ \___/ \__,_/ _(_)\____/   /____/
 
 # Memcached.js
 Memcached.js is a port of [Memcached](http://memcached.org/) to Javascript, running on Node.Js.
 
 ## Install
 
-	git clone git://github.com/dalssoft/memcached.js.git
-	cd memcached.js
-	node start.js
+```bash
+  $ git clone git://github.com/dalssoft/memcached.js.git
+  $ cd memcached.js
+  $ ./bin/memcachedjs
+```
 
 ## What does it do?
 
@@ -25,9 +26,9 @@ Memcached is an in-memory key-value store for small chunks of arbitrary data (st
 This version:
 
 * Non blocking operations: "take near constant time to execute, no matter how much data is in the cache."
-	* Well, not completely true: adding and removing items to cache allocate memory dynamically, because it doesn't allocate memory upfront when the server starts. So, it may take sometime allocating memory. We will fix it in the future, but for now, it probably won't hurt you.
-	* On the other hand, the cache operates on algorithms with O(1) complexity. No complex timers / triggers. Just a hash and linked list.
-	* And of course, it uses the non-blocking event machine provided by Node.js
+  * Well, not completely true: adding and removing items to cache allocate memory dynamically, because it doesn't allocate memory upfront when the server starts. So, it may take sometime allocating memory. We will fix it in the future, but for now, it probably won't hurt you.
+  * On the other hand, the cache operates on algorithms with O(1) complexity. No complex timers / triggers. Just a hash and linked list.
+  * And of course, it uses the non-blocking event machine provided by Node.js
 * Supported commands on this version: get, set, flush_all, delete, add, replace, stats
 * ASCII and Binary memcached protocol
 
@@ -41,7 +42,7 @@ This version:
 * stats command with params
 * Pre-allocate memory or pagination
 * Sophisticated cache strategies. All it does right now is the the old and good LRU, for all items. No discrimination.
-	* However, now it uses the same heuristic that the original project uses to clean expired items when it needs more space.
+  * However, now it uses the same heuristic that the original project uses to clean expired items when it needs more space.
 
 ## Project goals (sanity is not a prerequisite)
 
@@ -49,7 +50,7 @@ This version:
 2. Implement the same set of features the original project have
 3. Be a hackable memcached implementation
 
-## 	When Memory Is Reclaimed
+##   When Memory Is Reclaimed
 Memory for an item is not actively reclaimed. If you store an item and it expires, it sits in the LRU cache at its position until it falls to the end and is reused.
 
 However, if you fetch an expired item, memcached.js will find the item, notice that it's expired, and free its memory. This gives you the common case of normal cache churn reusing its own memory.
@@ -87,17 +88,23 @@ Perl:
 
 ## Using Memcached.js
 
-	cd memcached.js
-	node start.js
+```bash
+  $ cd memcached.js
+  $ ./bin/memcachedjs --log 1
+```
 
 On the client side:
 
-	telnet localhost 11211
-	stats
+```bash
+  $ telnet localhost 11211
+  stats
+```
 
 Test:
 
-    rspec -fd -c test/from_clients/ruby_spec_test.rb
+```bash
+  $ rspec -fd -c test/from_clients/ruby_spec_test.rb
+```
 
 ## Implemented commands
 
