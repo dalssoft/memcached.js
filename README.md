@@ -44,7 +44,7 @@ This version:
 * Sophisticated cache strategies. All it does right now is the the old and good LRU, for all items. No discrimination.
   * However, now it uses the same heuristic that the original project uses to clean expired items when it needs more space.
 
-## Project goals (sanity is not a prerequisite)
+## Project goals (sanity is not a prerequirement)
 
 1. Reach the same performance as C implementation
 2. Implement the same set of features the original project have
