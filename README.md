@@ -41,7 +41,7 @@ This version:
 * delete queue
 * stats command with params
 * Pre-allocate memory or pagination
-* Sophisticated cache strategies. All it does right now is the the old and good LRU, for all items. No discrimination.
+* Sophisticated cache strategies. All it does right now is the old and good LRU, for all items. No discrimination.
   * However, now it uses the same heuristic that the original project uses to clean expired items when it needs more space.
 
 ## Project goals (sanity is not a prerequirement)
