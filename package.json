@@ -18,7 +18,7 @@
     "lib": "./lib"
   },
   "dependencies": {
-    "minimist": "0.0.8"
+    "minimist": "1.2.2"
   },
   "author": {
     "name": "David Lojudice Sobrinho",
